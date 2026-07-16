@@ -1,14 +1,13 @@
-import React from 'react';
-import Navbar from '../components/Navbar/Navbar.jsx';
-import Hero from '../components/Hero/Hero.jsx';
+import Navbar from "../components/landing/Navbar";
+import Hero from "../components/landing/Hero";
 
-function Home() {
+const Home = () => {
   return (
-    <div>
+    <main className="min-h-screen bg-[#030712] text-white overflow-hidden">
       <Navbar />
       <Hero />
-    </div>
+    </main>
   );
-}
+};
 
 export default Home;

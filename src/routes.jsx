@@ -1,17 +1,14 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx';
-import MeetingRoom from './pages/MeetingRoom.jsx';
-import Summary from './pages/Summary.jsx';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 
-function AppRoutes() {
+const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/meeting/:roomId" element={<MeetingRoom />} />
-      <Route path="/summary/:roomId" element={<Summary />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default AppRoutes;

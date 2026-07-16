@@ -9,7 +9,10 @@ import {
 import TranscriptPanel from "../components/meeting/TranscriptPanel";
 import AICore from "../components/meeting/AICore";
 import ActivityFeed from "../components/meeting/ActivityFeed";
-
+import AIPipeline from "../components/meeting/AIPipeline";
+import useSocket from "../hooks/useSocket";
+import useMicrophone from "../hooks/useMicrophone";
+import Recorder from "../components/meeting/Recorder";
 const participants = [
   {
     id: 1,
@@ -35,6 +38,8 @@ const participants = [
 ];
 
 const MeetingRoom = () => {
+  useSocket();
+  useMicrophone();
   return (
     <div className="min-h-screen bg-[#030712] text-white">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030712]/80 backdrop-blur-xl">
@@ -69,10 +74,15 @@ const MeetingRoom = () => {
       <div className="py-12 flex justify-center">
         <AICore />
       </div>
+      <div className="flex justify-center mb-10">
+        <Recorder />
+      </div>
       <div className="max-w-7xl mx-auto px-6 mb-8">
         <ActivityFeed />
       </div>
-
+      <div className="max-w-7xl mx-auto px-6 mb-10">
+        <AIPipeline />
+      </div>
       <div className="max-w-7xl mx-auto p-6">
         <div className="grid lg:grid-cols-12 gap-6">
           {/* Participants */}

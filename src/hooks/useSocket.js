@@ -1,25 +1,20 @@
-import { useEffect, useState } from 'react';
-import { getSocket } from '../services/socket.js';
+import { useEffect } from "react";
+import socket from "../services/socket";
 
-export function useSocket(roomId) {
-  const [participants, setParticipants] = useState([]);
-  const [transcript, setTranscript] = useState([]);
-
+const useSocket = () => {
   useEffect(() => {
-    const socket = getSocket();
-    socket.emit('join-room', { roomId });
+    socket.connect();
 
-    socket.on('participants-update', setParticipants);
-    socket.on('transcript-entry', (entry) =>
-      setTranscript((prev) => [...prev, entry])
-    );
+    socket.emit("join-meeting", "VX-48392");
+
+    socket.on("joined-meeting", (data) => {
+      console.log("Joined Meeting", data);
+    });
 
     return () => {
-      socket.emit('leave-room', { roomId });
-      socket.off('participants-update');
-      socket.off('transcript-entry');
+      socket.off("joined-meeting");
     };
-  }, [roomId]);
+  }, []);
+};
 
-  return { participants, transcript };
-}
+export default useSocket;

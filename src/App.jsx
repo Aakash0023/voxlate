@@ -1,7 +1,17 @@
-import AppRoutes from "./routes";
+import Navbar from "./components/Navbar/Navbar";
+import Hero from "./components/Hero/Hero";
+import Pipeline from "./components/Pipeline/Pipeline";
+import DashboardPreview from "./components/DashboardPreview/DashboardPreview";
 
-const App = () => {
-  return <AppRoutes />;
-};
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Hero />
+      <Pipeline />
+      <DashboardPreview />
+    </>
+  );
+}
 
 export default App;

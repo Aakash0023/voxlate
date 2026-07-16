@@ -1,10 +1,8 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-let socket;
+const socket = io("http://localhost:5000", {
+  autoConnect: false,
+  transports: ["websocket"],
+});
 
-export function getSocket() {
-  if (!socket) {
-    socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
-  }
-  return socket;
-}
+export default socket;

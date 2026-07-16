@@ -7,6 +7,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import TranscriptPanel from "../components/meeting/TranscriptPanel";
+import AICore from "../components/meeting/AICore";
+import ActivityFeed from "../components/meeting/ActivityFeed";
 
 const participants = [
   {
@@ -64,6 +66,12 @@ const MeetingRoom = () => {
           </div>
         </div>
       </header>
+      <div className="py-12 flex justify-center">
+        <AICore />
+      </div>
+      <div className="max-w-7xl mx-auto px-6 mb-8">
+        <ActivityFeed />
+      </div>
 
       <div className="max-w-7xl mx-auto p-6">
         <div className="grid lg:grid-cols-12 gap-6">

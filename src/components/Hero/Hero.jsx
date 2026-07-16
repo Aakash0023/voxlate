@@ -7,43 +7,26 @@ const Hero = () => {
   return (
     <section className="hero">
       <div className="hero-left">
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="hero-badge"
-        >
+        <div className="hero-badge">
           <BrainCircuit size={18} />
-          AI Meeting Intelligence
-        </motion.div>
+          AI Meeting Assistant
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          Speak Once.
+        <h1>
+          Your AI Layer
           <br />
-          <span>Everyone Understands.</span>
-        </motion.h1>
+          <span>For Every Meeting.</span>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          Real-time AI translation, multilingual voice synthesis, live meeting
-          summaries and decision intelligence designed for modern teams.
-        </motion.p>
+        <p>
+          Works seamlessly with Google Meet, Zoom and Microsoft Teams to
+          translate conversations, detect decisions, generate summaries and
+          provide multilingual voice assistance in real time.
+        </p>
 
-        <motion.div
-          className="hero-buttons"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-        >
+        <div className="hero-buttons">
           <button className="primary-btn">
-            Launch Demo
+            Connect Meeting
             <ArrowRight size={18} />
           </button>
 
@@ -51,12 +34,12 @@ const Hero = () => {
             <Play size={18} />
             Watch Demo
           </button>
-        </motion.div>
+        </div>
 
         <div className="hero-stats">
           <div>
-            <h2>5+</h2>
-            <p>Languages</p>
+            <h2>4+</h2>
+            <p>Platforms</p>
           </div>
 
           <div>
@@ -65,92 +48,36 @@ const Hero = () => {
           </div>
 
           <div>
-            <h2>&lt;1s</h2>
-            <p>Latency</p>
+            <h2>6+</h2>
+            <p>Languages</p>
           </div>
         </div>
       </div>
 
-      <motion.div
-        className="hero-right"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.4 }}
-      >
-        <div className="network">
-          <div className="center-ai">
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-              }}
-              className="ai-core"
-            >
-              AI
-            </motion.div>
+      <div className="hero-right">
+        <div className="integration-flow">
+          <div className="platform-card">
+            <img src="https://cdn.simpleicons.org/googlemeet" alt="" />
+            <span>Google Meet</span>
           </div>
 
-          <div className="node english">
-            🇬🇧
-            <span>English</span>
+          <div className="flow-arrow">↓</div>
+
+          <div className="voxlate-core">
+            <div className="core-circle">VOXLATE</div>
           </div>
 
-          <div className="node tamil">
-            🇮🇳
-            <span>Tamil</span>
-          </div>
+          <div className="flow-grid">
+            <div className="flow-box">Transcript</div>
 
-          <div className="node hindi">
-            🇮🇳
-            <span>Hindi</span>
-          </div>
+            <div className="flow-box">Translation</div>
 
-          <div className="node telugu">
-            🇮🇳
-            <span>Telugu</span>
-          </div>
+            <div className="flow-box">Decisions</div>
 
-          <div className="node kannada">
-            🇮🇳
-            <span>Kannada</span>
-          </div>
-
-          <svg>
-            <line x1="50%" y1="50%" x2="15%" y2="18%" />
-
-            <line x1="50%" y1="50%" x2="85%" y2="18%" />
-
-            <line x1="50%" y1="50%" x2="18%" y2="78%" />
-
-            <line x1="50%" y1="50%" x2="82%" y2="78%" />
-          </svg>
-        </div>
-
-        <div className="console">
-          <div className="console-header">
-            <span className="live"></span>
-            AI Processing
-          </div>
-
-          <div className="console-item">
-            <Mic size={18} />
-            Listening...
-          </div>
-
-          <div className="console-item">
-            <Languages size={18} />
-            Translating...
-          </div>
-
-          <div className="console-item">
-            <BrainCircuit size={18} />
-            Detecting Decisions...
+            <div className="flow-box">Summary</div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

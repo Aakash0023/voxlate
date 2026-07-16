@@ -1,6 +1,7 @@
 import Navbar from "../components/landing/Navbar";
 import Hero from "../components/landing/Hero";
 import LiveDemo from "../components/landing/LiveDemo";
+import Problem from "../components/landing/Problem";
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <LiveDemo />
+      <Problem />
     </main>
   );
 };

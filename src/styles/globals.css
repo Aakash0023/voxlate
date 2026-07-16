@@ -285,3 +285,12 @@ body {
   opacity: 0.15;
   pointer-events: none;
 }
+body {
+  margin-right: 380px;
+}
+
+@media (max-width: 1100px) {
+  body {
+    margin-right: 0;
+  }
+}

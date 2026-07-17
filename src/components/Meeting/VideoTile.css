@@ -1,0 +1,53 @@
+.video-tile {
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 28px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  transition: 0.3s;
+}
+
+.video-tile:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar svg {
+  color: white;
+}
+
+.video-tile h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.video-tile p {
+  color: #9ca3af;
+  margin-bottom: 18px;
+}
+
+.tile-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  color: #d1d5db;
+}

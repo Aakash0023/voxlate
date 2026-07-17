@@ -16,8 +16,7 @@ function App() {
           path="/dashboard"
           element={<NewMeetingRedirect base="/dashboard" />}
         />
-        <Route path="/dashboard/:roomId" element={<Dashboard />} />
-
+        <Route path="/meeting/:roomId" element={<MeetingRoom />} />
         <Route
           path="/meeting"
           element={<NewMeetingRedirect base="/meeting" />}

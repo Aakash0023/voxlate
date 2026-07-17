@@ -1,29 +1,43 @@
+import { useParams, useNavigate } from "react-router-dom";
 import { Users, Mic, MicOff, Monitor, PhoneOff } from "lucide-react";
 
 import AISidebar from "../components/Sidebar/AISidebar";
+import useMicrophone from "../hooks/useMicrophone";
 import "./Dashboard.css";
 
 const Dashboard = () => {
+  const { roomId } = useParams();
+  const navigate = useNavigate();
+  const { isRecording, stop } = useMicrophone(roomId, {
+    speaker: "You",
+    targetLang: "ta",
+  });
+
+  const handleLeave = () => {
+    stop();
+    navigate(`/summary/${roomId}`);
+  };
+
   return (
     <div className="dashboard-page">
       <div className="meeting-area">
         <div className="meeting-header">
           <div>
             <h1>Google Meet</h1>
-            <p>Connected with Voxlate AI</p>
+            <p>Connected with Voxlate AI • Room {roomId}</p>
           </div>
 
           <div className="meeting-live">
             <span></span>
-            Live
+            {isRecording ? "Live" : "Connecting"}
           </div>
         </div>
 
         <div className="participants-grid">
-          <div className="participant-card active">
+          <div className={`participant-card ${isRecording ? "active" : ""}`}>
             <Users size={50} />
-            <h3>Rahul</h3>
-            <p>Speaking...</p>
+            <h3>You</h3>
+            <p>{isRecording ? "Speaking..." : "Connecting..."}</p>
           </div>
 
           <div className="participant-card">
@@ -46,11 +60,11 @@ const Dashboard = () => {
         </div>
 
         <div className="meeting-controls">
-          <button>
+          <button disabled={isRecording} title="Mic is on automatically while connected">
             <Mic size={20} />
           </button>
 
-          <button>
+          <button onClick={stop} title="Mute microphone">
             <MicOff size={20} />
           </button>
 
@@ -58,13 +72,13 @@ const Dashboard = () => {
             <Monitor size={20} />
           </button>
 
-          <button className="leave-btn">
+          <button className="leave-btn" onClick={handleLeave}>
             <PhoneOff size={20} />
           </button>
         </div>
       </div>
 
-      <AISidebar />
+      <AISidebar roomId={roomId} targetLangLabel="Tamil" />
     </div>
   );
 };

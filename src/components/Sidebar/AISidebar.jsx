@@ -9,9 +9,12 @@ import {
 import "./AISidebar.css";
 import useSocket from "../../hooks/useSocket";
 
-const AISidebar = () => {
-  const { transcript, translation, summary, decision, actionItems } =
-    useSocket();
+const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
+  const { connected, transcript, summary, decisions, actionItems } =
+    useSocket(roomId);
+
+  const latest = transcript[transcript.length - 1];
+  const latestDecision = decisions[decisions.length - 1];
 
   return (
     <aside className="ai-sidebar">
@@ -26,7 +29,7 @@ const AISidebar = () => {
 
         <div className="live-chip">
           <span></span>
-          Listening
+          {connected ? "Listening" : "Connecting..."}
         </div>
       </div>
 
@@ -36,16 +39,16 @@ const AISidebar = () => {
           Live Transcript
         </div>
 
-        <p>{transcript || "Waiting for transcript..."}</p>
+        <p>{latest?.original || "Waiting for transcript..."}</p>
       </div>
 
       <div className="sidebar-card">
         <div className="card-title">
           <Languages size={18} />
-          Tamil Translation
+          {targetLangLabel} Translation
         </div>
 
-        <p>{translation || "Waiting for translation..."}</p>
+        <p>{latest?.translated || "Waiting for translation..."}</p>
       </div>
 
       <div className="sidebar-card">
@@ -55,7 +58,7 @@ const AISidebar = () => {
         </div>
 
         <div className="decision-box">
-          {decision || "Waiting for AI decision..."}
+          {latestDecision?.text || "Waiting for AI decision..."}
         </div>
       </div>
 
@@ -76,7 +79,11 @@ const AISidebar = () => {
 
         <ul>
           {actionItems.length > 0 ? (
-            actionItems.map((item, index) => <li key={index}>{item}</li>)
+            actionItems.map((item) => (
+              <li key={item.id}>
+                {item.description} — {item.owner || "Unassigned"}
+              </li>
+            ))
           ) : (
             <li>Waiting for action items...</li>
           )}

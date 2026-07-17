@@ -1,20 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import socket from "../services/socket";
 
 const useSocket = () => {
+  const [transcript, setTranscript] = useState("");
+  const [translation, setTranslation] = useState("");
+  const [summary, setSummary] = useState("");
+  const [decision, setDecision] = useState("");
+  const [actionItems, setActionItems] = useState([]);
+
   useEffect(() => {
-    socket.connect();
+    socket.emit("join-meeting", "meeting-1");
 
-    socket.emit("join-meeting", "VX-48392");
-
-    socket.on("joined-meeting", (data) => {
-      console.log("Joined Meeting", data);
-    });
+    socket.on("transcript", setTranscript);
+    socket.on("translation", setTranslation);
+    socket.on("summary", setSummary);
+    socket.on("decision", setDecision);
+    socket.on("actionItems", setActionItems);
 
     return () => {
-      socket.off("joined-meeting");
+      socket.off("transcript");
+      socket.off("translation");
+      socket.off("summary");
+      socket.off("decision");
+      socket.off("actionItems");
     };
   }, []);
+
+  return {
+    transcript,
+    translation,
+    summary,
+    decision,
+    actionItems,
+  };
 };
 
 export default useSocket;

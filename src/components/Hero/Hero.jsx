@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Mic, Languages, BrainCircuit } from "lucide-react";
+import { ArrowRight, Play, BrainCircuit } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import "./Hero.css";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="hero">
       <div className="hero-left">
@@ -12,20 +15,31 @@ const Hero = () => {
           AI Meeting Assistant
         </div>
 
-        <h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           Your AI Layer
           <br />
           <span>For Every Meeting.</span>
-        </h1>
+        </motion.h1>
 
-        <p>
+        <motion.p
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+        >
           Works seamlessly with Google Meet, Zoom and Microsoft Teams to
           translate conversations, detect decisions, generate summaries and
           provide multilingual voice assistance in real time.
-        </p>
+        </motion.p>
 
         <div className="hero-buttons">
-          <button className="primary-btn">
+          <button
+            className="primary-btn"
+            onClick={() => navigate("/dashboard")}
+          >
             Connect Meeting
             <ArrowRight size={18} />
           </button>
@@ -57,7 +71,10 @@ const Hero = () => {
       <div className="hero-right">
         <div className="integration-flow">
           <div className="platform-card">
-            <img src="https://cdn.simpleicons.org/googlemeet" alt="" />
+            <img
+              src="https://cdn.simpleicons.org/googlemeet"
+              alt="Google Meet"
+            />
             <span>Google Meet</span>
           </div>
 
@@ -69,11 +86,8 @@ const Hero = () => {
 
           <div className="flow-grid">
             <div className="flow-box">Transcript</div>
-
             <div className="flow-box">Translation</div>
-
             <div className="flow-box">Decisions</div>
-
             <div className="flow-box">Summary</div>
           </div>
         </div>

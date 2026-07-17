@@ -7,8 +7,12 @@ import {
 } from "lucide-react";
 
 import "./AISidebar.css";
+import useSocket from "../../hooks/useSocket";
 
 const AISidebar = () => {
+  const { transcript, translation, summary, decision, actionItems } =
+    useSocket();
+
   return (
     <aside className="ai-sidebar">
       <div className="sidebar-header">
@@ -32,10 +36,7 @@ const AISidebar = () => {
           Live Transcript
         </div>
 
-        <p>
-          Good morning everyone. Let's finalize the deployment tomorrow and
-          assign testing today.
-        </p>
+        <p>{transcript || "Waiting for transcript..."}</p>
       </div>
 
       <div className="sidebar-card">
@@ -44,7 +45,7 @@ const AISidebar = () => {
           Tamil Translation
         </div>
 
-        <p>அனைவருக்கும் காலை வணக்கம். நாளை வெளியீட்டை முடிப்போம்.</p>
+        <p>{translation || "Waiting for translation..."}</p>
       </div>
 
       <div className="sidebar-card">
@@ -54,7 +55,7 @@ const AISidebar = () => {
         </div>
 
         <div className="decision-box">
-          Deploy the platform tomorrow morning.
+          {decision || "Waiting for AI decision..."}
         </div>
       </div>
 
@@ -64,11 +65,7 @@ const AISidebar = () => {
           Meeting Summary
         </div>
 
-        <ul>
-          <li>Deployment scheduled.</li>
-          <li>Testing assigned.</li>
-          <li>Team agreed on release plan.</li>
-        </ul>
+        <p>{summary || "Waiting for meeting summary..."}</p>
       </div>
 
       <div className="sidebar-card">
@@ -78,9 +75,11 @@ const AISidebar = () => {
         </div>
 
         <ul>
-          <li>Rahul → Deploy Platform</li>
-          <li>Aakash → Verify Build</li>
-          <li>Priya → Complete Testing</li>
+          {actionItems.length > 0 ? (
+            actionItems.map((item, index) => <li key={index}>{item}</li>)
+          ) : (
+            <li>Waiting for action items...</li>
+          )}
         </ul>
       </div>
     </aside>

@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Mic,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import "./AISidebar.css";
 import useSocket from "../../hooks/useSocket";
@@ -13,8 +14,13 @@ const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
   const { connected, transcript, summary, decisions, actionItems } =
     useSocket(roomId);
 
-  const latest = transcript[transcript.length - 1];
-  const latestDecision = decisions[decisions.length - 1];
+  const transcriptRef = useRef(null);
+
+  useEffect(() => {
+    if (transcriptRef.current) {
+      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+    }
+  }, [transcript]);
 
   return (
     <aside className="ai-sidebar">
@@ -39,7 +45,18 @@ const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
           Live Transcript
         </div>
 
-        <p>{latest?.original || "Waiting for transcript..."}</p>
+        <div className="transcript-box" ref={transcriptRef}>
+          {transcript.length ? (
+            transcript.slice(-10).map((line, index) => (
+              <div key={index} className="transcript-item">
+                <strong>{line.speaker}</strong>
+                <p>{line.original}</p>
+              </div>
+            ))
+          ) : (
+            <p>Waiting for transcript...</p>
+          )}
+        </div>
       </div>
 
       <div className="sidebar-card">
@@ -48,18 +65,34 @@ const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
           {targetLangLabel} Translation
         </div>
 
-        <p>{latest?.translated || "Waiting for translation..."}</p>
+        <div className="transcript-box" ref={transcriptRef}>
+          {transcript.length ? (
+            transcript.slice(-10).map((line, index) => (
+              <div key={index} className="transcript-item">
+                <p>{line.translated || "Translation unavailable"}</p>
+              </div>
+            ))
+          ) : (
+            <p>Waiting for translation...</p>
+          )}
+        </div>
       </div>
 
       <div className="sidebar-card">
         <div className="card-title">
           <BrainCircuit size={18} />
-          AI Decision
+          AI Decisions
         </div>
 
-        <div className="decision-box">
-          {latestDecision?.text || "Waiting for AI decision..."}
-        </div>
+        {decisions.length ? (
+          <ul className="decision-list">
+            {decisions.map((decision, index) => (
+              <li key={index}>{decision.text}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className="decision-box">Waiting for AI decisions...</div>
+        )}
       </div>
 
       <div className="sidebar-card">
@@ -68,7 +101,7 @@ const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
           Meeting Summary
         </div>
 
-        <p>{summary || "Waiting for meeting summary..."}</p>
+        <p>{summary || "Meeting summary will appear here..."}</p>
       </div>
 
       <div className="sidebar-card">
@@ -77,17 +110,21 @@ const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {
           Action Items
         </div>
 
-        <ul>
-          {actionItems.length > 0 ? (
-            actionItems.map((item) => (
-              <li key={item.id}>
-                {item.description} — {item.owner || "Unassigned"}
+        {actionItems.length ? (
+          <ul>
+            {actionItems.map((item, index) => (
+              <li key={index}>
+                <strong>{item.owner || "Unassigned"}</strong>
+                {" → "}
+                {item.description}
               </li>
-            ))
-          ) : (
+            ))}
+          </ul>
+        ) : (
+          <ul>
             <li>Waiting for action items...</li>
-          )}
-        </ul>
+          </ul>
+        )}
       </div>
     </aside>
   );

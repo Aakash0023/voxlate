@@ -1,19 +1,33 @@
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Users, Mic, MicOff, Monitor, PhoneOff } from "lucide-react";
 
 import AISidebar from "../components/Sidebar/AISidebar";
 import useMicrophone from "../hooks/useMicrophone";
+import socket from "../services/socket";
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
+
   const { isRecording, stop } = useMicrophone(roomId, {
     speaker: "You",
     targetLang: "ta",
   });
 
+  useEffect(() => {
+    if (!roomId) return;
+
+    socket.emit("join-meeting", roomId);
+
+    return () => {
+      socket.emit("leave-meeting", roomId);
+    };
+  }, [roomId]);
+
   const handleLeave = () => {
+    socket.emit("leave-meeting", roomId);
     stop();
     navigate(`/summary/${roomId}`);
   };
@@ -29,7 +43,7 @@ const Dashboard = () => {
 
           <div className="meeting-live">
             <span></span>
-            {isRecording ? "Live" : "Connecting"}
+            {isRecording ? "Live" : "Connecting..."}
           </div>
         </div>
 
@@ -37,7 +51,7 @@ const Dashboard = () => {
           <div className={`participant-card ${isRecording ? "active" : ""}`}>
             <Users size={50} />
             <h3>You</h3>
-            <p>{isRecording ? "Speaking..." : "Connecting..."}</p>
+            <p>{isRecording ? "Speaking..." : "Listening..."}</p>
           </div>
 
           <div className="participant-card">
@@ -60,19 +74,23 @@ const Dashboard = () => {
         </div>
 
         <div className="meeting-controls">
-          <button disabled={isRecording} title="Mic is on automatically while connected">
+          <button disabled={isRecording} title="Microphone is recording">
             <Mic size={20} />
           </button>
 
-          <button onClick={stop} title="Mute microphone">
+          <button onClick={stop} title="Stop Recording">
             <MicOff size={20} />
           </button>
 
-          <button>
+          <button title="Share Screen">
             <Monitor size={20} />
           </button>
 
-          <button className="leave-btn" onClick={handleLeave}>
+          <button
+            className="leave-btn"
+            onClick={handleLeave}
+            title="Leave Meeting"
+          >
             <PhoneOff size={20} />
           </button>
         </div>

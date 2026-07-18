@@ -1,7 +1,7 @@
 .meeting-room {
   background: rgba(18, 25, 38, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 24px;
   backdrop-filter: blur(18px);
 }
@@ -45,41 +45,53 @@
     transform: scale(1);
     opacity: 1;
   }
-
   50% {
     transform: scale(1.5);
     opacity: 0.5;
   }
-
   100% {
     transform: scale(1);
     opacity: 1;
   }
 }
 
+.meeting-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.video-section {
+  display: flex;
+}
+
 .participants-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  width: 100%;
 }
 
 .participant-card {
   background: #172131;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 24px;
   position: relative;
   overflow: hidden;
   transition: 0.3s;
   border: 2px solid transparent;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
 }
 
 .participant-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
 }
 
 .participant-card.speaking {
   border-color: #3b82f6;
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 35px rgba(59, 130, 246, 0.3);
 }
 
 .participant-avatar {
@@ -90,14 +102,14 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  font-weight: bold;
   color: white;
+  font-weight: 700;
   margin-bottom: 18px;
 }
 
 .participant-info h3 {
-  color: white;
   margin: 0;
+  color: white;
 }
 
 .participant-info span {
@@ -107,23 +119,23 @@
 
 .participant-icons {
   display: flex;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 12px;
   color: white;
+  margin-top: auto;
 }
 
 .speaking-wave {
   display: flex;
   gap: 5px;
-  margin-top: 20px;
   align-items: flex-end;
-  height: 24px;
+  height: 22px;
+  margin-top: 18px;
 }
 
 .speaking-wave span {
   width: 5px;
-  background: #3b82f6;
   border-radius: 20px;
+  background: #3b82f6;
   animation: wave 1s infinite;
 }
 
@@ -151,10 +163,76 @@
   100% {
     transform: scaleY(0.5);
   }
-
   50% {
     transform: scaleY(1.4);
   }
+}
+
+.ai-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  padding: 18px;
+  border-radius: 18px;
+  background: #172131;
+}
+
+.ai-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.ai-card {
+  background: #172131;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
+}
+
+.ai-card:hover {
+  border-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.ai-card p {
+  margin: 0;
+  color: #d1d5db;
+  line-height: 1.6;
+}
+
+.primary-text {
+  color: white;
+  margin-bottom: 12px !important;
+}
+
+.secondary-text {
+  color: #38bdf8 !important;
+}
+
+.ai-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #d1d5db;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .meeting-controls {
@@ -165,11 +243,11 @@
 }
 
 .meeting-controls button {
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border: none;
   border-radius: 50%;
-  background: #1f2937;
+  background: #172131;
   color: white;
   cursor: pointer;
   transition: 0.25s;
@@ -179,7 +257,7 @@
 }
 
 .meeting-controls button:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   background: #2563eb;
 }
 
@@ -189,6 +267,16 @@
 
 .end-call:hover {
   background: #ef4444 !important;
+}
+
+@media (max-width: 1100px) {
+  .meeting-body {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-sidebar {
+    margin-top: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -204,5 +292,113 @@
 
   .meeting-controls {
     flex-wrap: wrap;
+  }
+}
+.video-placeholder {
+  flex: 1;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(37, 99, 235, 0.18),
+    transparent 55%
+  );
+}
+
+.live-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #ef4444;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.participant-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.speaking-indicator {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 20px;
+}
+
+.speaking-indicator span {
+  width: 4px;
+  border-radius: 20px;
+  background: #3b82f6;
+  animation: voice 1s infinite;
+}
+
+.speaking-indicator span:nth-child(1) {
+  height: 10px;
+}
+
+.speaking-indicator span:nth-child(2) {
+  height: 18px;
+  animation-delay: 0.15s;
+}
+
+.speaking-indicator span:nth-child(3) {
+  height: 13px;
+  animation-delay: 0.3s;
+}
+
+@keyframes voice {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+
+  50% {
+    transform: scaleY(1.4);
+  }
+}
+
+.participant-card {
+  padding: 16px;
+  min-height: 290px;
+}
+
+.participant-avatar {
+  width: 90px;
+  height: 90px;
+  font-size: 34px;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+}
+
+.participant-card.speaking .participant-avatar {
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+  }
+
+  to {
+    box-shadow: 0 0 45px rgba(37, 99, 235, 0.8);
   }
 }

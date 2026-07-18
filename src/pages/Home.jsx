@@ -1,17 +1,13 @@
-import Navbar from "../components/landing/Navbar";
-import Hero from "../components/landing/Hero";
-import LiveDemo from "../components/landing/LiveDemo";
-import Problem from "../components/landing/Problem";
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import Features from "../components/Features";
 
-const Home = () => {
+export default function Home() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-hidden">
+    <>
       <Navbar />
       <Hero />
-      <LiveDemo />
-      <Problem />
-    </main>
+      <Features />
+    </>
   );
-};
-
-export default Home;
+}

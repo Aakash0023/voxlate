@@ -1,34 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Meeting from "./pages/Meeting";
 
-import LandingPage from "./pages/LandingPage";
-import MeetingRoom from "./pages/MeetingRoom";
-import Summary from "./pages/Summary";
-import NewMeetingRedirect from "./pages/NewMeetingRedirect";
-
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-
-        <Route
-          path="/dashboard"
-          element={<NewMeetingRedirect base="/meeting" />}
-        />
-
-        <Route path="/dashboard/:roomId" element={<MeetingRoom />} />
-
-        <Route
-          path="/meeting"
-          element={<NewMeetingRedirect base="/meeting" />}
-        />
-
-        <Route path="/meeting/:roomId" element={<MeetingRoom />} />
-
-        <Route path="/summary/:roomId" element={<Summary />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/meeting" element={<Meeting />} />
+    </Routes>
   );
 }
-
-export default App;

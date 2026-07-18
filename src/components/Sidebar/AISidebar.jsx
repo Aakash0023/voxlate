@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-import "./AISidebar.css";
 import useSocket from "../../hooks/useSocket";
 
 const AISidebar = ({ roomId, targetLangLabel = "Tamil" }) => {

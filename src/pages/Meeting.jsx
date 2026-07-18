@@ -71,7 +71,7 @@ export default function Meeting() {
   }, [transcripts]);
 
   const speakTranslation = (text, language) => {
-    if (!text || !voicesLoaded.current) return;
+    if (!text) return;
 
     speechSynthesis.cancel();
 
@@ -79,22 +79,38 @@ export default function Meeting() {
 
     const languageMap = {
       Tamil: "ta-IN",
-      English: "en-US",
+      English: "en-IN",
       Hindi: "hi-IN",
       Telugu: "te-IN",
       Malayalam: "ml-IN",
     };
 
-    utterance.lang = languageMap[language] || "en-US";
+    utterance.lang = languageMap[language] || "en-IN";
 
     const voices = speechSynthesis.getVoices();
 
-    const voice =
-      voices.find((v) => v.lang === utterance.lang) ||
-      voices.find((v) => v.lang.startsWith(utterance.lang.split("-")[0]));
+    let voice = null;
+
+    if (language === "Hindi") {
+      voice =
+        voices.find((v) => v.name.includes("Google हिन्दी")) ||
+        voices.find((v) => v.lang === "hi-IN");
+    } else if (language === "English") {
+      voice =
+        voices.find((v) => v.name.includes("Microsoft Ravi")) ||
+        voices.find((v) => v.name.includes("Microsoft Heera")) ||
+        voices.find((v) => v.lang === "en-IN");
+    } else {
+      voice =
+        voices.find((v) => v.lang === utterance.lang) ||
+        voices.find((v) => v.lang.startsWith(utterance.lang.split("-")[0]));
+    }
 
     if (voice) {
       utterance.voice = voice;
+      console.log("Using voice:", voice.name);
+    } else {
+      console.log("No matching voice found. Using browser default.");
     }
 
     utterance.rate = 1;
@@ -111,8 +127,10 @@ export default function Meeting() {
 
     setLastSpoken(ai.translation);
 
-    speakTranslation(ai.translation, selectedLanguage);
-  }, [ai.translation, selectedLanguage]);
+    setTimeout(() => {
+      speakTranslation(ai.translation, selectedLanguage);
+    }, 300);
+  }, [ai.translation]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);

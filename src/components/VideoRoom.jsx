@@ -34,6 +34,7 @@ import useDeepgram from "../hooks/useDeepgram";
 import "@livekit/components-styles";
 import "../styles/videoRoom.css";
 import MeetingControls from "./MeetingControls";
+import.meta.env.VITE_API_URL;
 
 function VideoGrid() {
   const tracks = useTracks(
@@ -200,16 +201,19 @@ export default function VideoRoom({ meetingId }) {
   useEffect(() => {
     async function fetchToken() {
       try {
-        const res = await fetch("http://localhost:5000/api/livekit/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            roomName: meetingId,
-            participantName: `User-${Math.floor(Math.random() * 10000)}`,
-          }),
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/livekit/token`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              roomName: meetingId,
+              participantName: `User-${Math.floor(Math.random() * 10000)}`,
+            }),
+          }
+        );
 
         const data = await res.json();
 

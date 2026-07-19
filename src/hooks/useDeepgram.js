@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { startAudioCapture } from "../utils/audioCapture";
+import.meta.env.VITE_API_URL;
 
-const socket = io("http://localhost:5000", {
+const socket = io(`${import.meta.env.VITE_API_URL}`, {
   transports: ["websocket"],
   autoConnect: true,
 });
-
 export default function useDeepgram(language = "Tamil") {
   const [aiData, setAiData] = useState({
     transcript: "",

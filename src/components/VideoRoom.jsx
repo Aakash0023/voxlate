@@ -6,6 +6,7 @@ import {
   RoomAudioRenderer,
   useTracks,
   useLocalParticipant,
+  useRoomContext,
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import { jsPDF } from "jspdf";
@@ -32,6 +33,7 @@ import useDeepgram from "../hooks/useDeepgram";
 
 import "@livekit/components-styles";
 import "../styles/videoRoom.css";
+import MeetingControls from "./MeetingControls";
 
 function VideoGrid() {
   const tracks = useTracks(
@@ -71,7 +73,13 @@ export default function VideoRoom({ meetingId }) {
   const [token, setToken] = useState("");
   const [seconds, setSeconds] = useState(0);
 
-  const ai = useDeepgram("English");
+  const [targetLanguage, setTargetLanguage] = useState("Tamil");
+
+  const ai = useDeepgram(targetLanguage);
+
+  const [micEnabled, setMicEnabled] = useState(true);
+  const [cameraEnabled, setCameraEnabled] = useState(true);
+  const [screenSharing, setScreenSharing] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -257,9 +265,19 @@ export default function VideoRoom({ meetingId }) {
 
             <div className="header-chip">
               <Languages size={16} />
-              <span>English → Tamil</span>
-            </div>
 
+              <select
+                className="language-select"
+                value={targetLanguage}
+                onChange={(e) => setTargetLanguage(e.target.value)}
+              >
+                <option value="Tamil">Tamil</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Kannada">Kannada</option>
+                <option value="Malayalam">Malayalam</option>
+              </select>
+            </div>
             <div className="header-chip">
               <Timer size={16} />
               <span>{meetingTime}</span>
@@ -368,53 +386,10 @@ export default function VideoRoom({ meetingId }) {
           </aside>
         </main>
 
-        <footer className="meeting-controls">
-          <button className="control-btn" title="Microphone">
-            <Mic size={20} />
-          </button>
-
-          <button className="control-btn" title="Camera">
-            <Video size={20} />
-          </button>
-
-          <button className="control-btn" title="Share Screen">
-            <MonitorUp size={20} />
-          </button>
-
-          <button className="control-btn" title="Translate">
-            <Languages size={20} />
-          </button>
-
-          <button
-            className="control-btn"
-            title="Copy Summary"
-            onClick={copySummary}
-          >
-            <Copy size={20} />
-          </button>
-
-          <button
-            className="control-btn"
-            title="Download PDF"
-            onClick={downloadSummary}
-          >
-            <Download size={20} />
-          </button>
-
-          <button
-            className="end-call"
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to leave the meeting?")
-              ) {
-                alert("Meeting Ended");
-                window.location.href = "/";
-              }
-            }}
-          >
-            <PhoneOff size={20} />
-          </button>
-        </footer>
+        <MeetingControls
+          copySummary={copySummary}
+          downloadSummary={downloadSummary}
+        />
       </div>
     </LiveKitRoom>
   );

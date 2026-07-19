@@ -1,5 +1,6 @@
 import "../styles/navbar.css";
-export default function Navbar() {
+
+export default function Navbar({ onCreateMeeting }) {
   return (
     <nav className="navbar">
       <div className="logo">
@@ -12,7 +13,9 @@ export default function Navbar() {
         <a href="#about">About</a>
       </div>
 
-      <button className="nav-btn">Start Meeting</button>
+      <button className="nav-btn" onClick={onCreateMeeting}>
+        Start Meeting
+      </button>
     </nav>
   );
 }

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
+import HowItWorks from "../components/HowItWorks";
+import About from "../components/About";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -20,9 +22,11 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
+      <Navbar onCreateMeeting={createMeeting} />
       <Hero onCreateMeeting={createMeeting} onJoinMeeting={joinMeeting} />
       <Features />
+      <HowItWorks />
+      <About />
     </>
   );
 }

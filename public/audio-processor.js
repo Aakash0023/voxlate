@@ -2,16 +2,16 @@ class PCMProcessor extends AudioWorkletProcessor {
   process(inputs) {
     const input = inputs[0];
 
-    if (!input || !input[0]) {
-      return true;
-    }
+    if (!input.length) return true;
 
     const channel = input[0];
 
-    this.port.postMessage(channel);
+    if (!channel) return true;
+
+    this.port.postMessage(channel.slice(0));
 
     return true;
   }
 }
 
-registerProcessor("pcm-processor", PCMProcessor);
+registerProcessor("audio-processor", PCMProcessor);

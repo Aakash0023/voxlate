@@ -6,7 +6,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/meeting" element={<Meeting />} />
+      <Route path="/meeting/:meetingId" element={<Meeting />} />
     </Routes>
   );
 }

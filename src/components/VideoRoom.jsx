@@ -8,6 +8,8 @@ import {
   useLocalParticipant,
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
+import { jsPDF } from "jspdf";
+
 import {
   Bot,
   Languages,
@@ -21,8 +23,13 @@ import {
   MonitorUp,
   Timer,
   Circle,
+  Share2,
+  Download,
+  Copy,
 } from "lucide-react";
+
 import useDeepgram from "../hooks/useDeepgram";
+
 import "@livekit/components-styles";
 import "../styles/videoRoom.css";
 
@@ -60,7 +67,7 @@ function AudioCapture() {
   return null;
 }
 
-export default function VideoRoom() {
+export default function VideoRoom({ meetingId }) {
   const [token, setToken] = useState("");
   const [seconds, setSeconds] = useState(0);
 
@@ -78,8 +85,109 @@ export default function VideoRoom() {
     const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
     const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
     const s = String(seconds % 60).padStart(2, "0");
+
     return `${h}:${m}:${s}`;
   }, [seconds]);
+
+  const copyMeetingLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Meeting link copied!");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const copySummary = async () => {
+    try {
+      await navigator.clipboard.writeText(ai.summary || "");
+      alert("Summary copied!");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const downloadSummary = () => {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFillColor(24, 24, 40);
+    doc.rect(0, 0, pageWidth, 35, "F");
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.text("VOXLATE", 20, 20);
+
+    doc.setFontSize(11);
+    doc.text("AI Meeting Intelligence Report", 20, 28);
+
+    doc.setTextColor(0, 0, 0);
+
+    let y = 50;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Meeting Information", 20, y);
+
+    y += 12;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+
+    doc.text(`Meeting ID: ${meetingId}`, 20, y);
+
+    y += 8;
+
+    doc.text(`Duration: ${meetingTime}`, 20, y);
+
+    y += 8;
+
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 20, y);
+
+    y += 18;
+
+    const addSection = (title, content) => {
+      if (y > 240) {
+        doc.addPage();
+        y = 20;
+      }
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text(title, 20, y);
+
+      y += 10;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+
+      const lines = doc.splitTextToSize(
+        content || "No information available.",
+        170
+      );
+
+      doc.text(lines, 20, y);
+
+      y += lines.length * 7 + 12;
+    };
+
+    addSection("AI Summary", ai.summary);
+    addSection("Live Transcript", ai.transcript);
+    addSection("Key Decisions", ai.decision);
+    addSection("Action Items", ai.task);
+
+    doc.setDrawColor(220);
+    doc.line(20, 280, 190, 280);
+
+    doc.setFontSize(10);
+    doc.setTextColor(120);
+
+    doc.text("Generated automatically by VOXLATE AI", 20, 287);
+
+    doc.save(`VOXLATE-${meetingId}.pdf`);
+  };
 
   useEffect(() => {
     async function fetchToken() {
@@ -90,12 +198,13 @@ export default function VideoRoom() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            roomName: "voxlate-room",
+            roomName: meetingId,
             participantName: `User-${Math.floor(Math.random() * 10000)}`,
           }),
         });
 
         const data = await res.json();
+
         setToken(data.token);
       } catch (err) {
         console.error(err);
@@ -103,7 +212,7 @@ export default function VideoRoom() {
     }
 
     fetchToken();
-  }, []);
+  }, [meetingId]);
 
   if (!token) {
     return (
@@ -143,7 +252,7 @@ export default function VideoRoom() {
           <div className="header-right">
             <div className="header-chip">
               <Users size={16} />
-              <span>Meeting</span>
+              <span>{meetingId}</span>
             </div>
 
             <div className="header-chip">
@@ -156,6 +265,21 @@ export default function VideoRoom() {
               <span>{meetingTime}</span>
             </div>
 
+            <button className="header-chip" onClick={copyMeetingLink}>
+              <Share2 size={16} />
+              <span>Share</span>
+            </button>
+
+            <button className="header-chip" onClick={copySummary}>
+              <Copy size={16} />
+              <span>Copy</span>
+            </button>
+
+            <button className="header-chip" onClick={downloadSummary}>
+              <Download size={16} />
+              <span>PDF</span>
+            </button>
+
             <div className="recording">
               <Circle size={10} fill="currentColor" />
               Recording
@@ -164,9 +288,12 @@ export default function VideoRoom() {
         </header>
 
         <main className="meeting-content">
-          <section className="meeting-video">
-            <VideoGrid />
+          <section className="video-section">
+            <div className="video-wrapper">
+              <VideoGrid />
+            </div>
           </section>
+
           <aside className="ai-sidebar">
             <div className="sidebar-header">
               <div className="sidebar-title">
@@ -220,7 +347,7 @@ export default function VideoRoom() {
             <div className="ai-card">
               <div className="card-title">
                 <CheckCircle2 size={18} />
-                <span>Decisions</span>
+                <span>Key Decisions</span>
               </div>
 
               <div className="card-content">
@@ -242,23 +369,49 @@ export default function VideoRoom() {
         </main>
 
         <footer className="meeting-controls">
-          <button className="control-btn">
+          <button className="control-btn" title="Microphone">
             <Mic size={20} />
           </button>
 
-          <button className="control-btn">
+          <button className="control-btn" title="Camera">
             <Video size={20} />
           </button>
 
-          <button className="control-btn">
+          <button className="control-btn" title="Share Screen">
             <MonitorUp size={20} />
           </button>
 
-          <button className="control-btn">
+          <button className="control-btn" title="Translate">
             <Languages size={20} />
           </button>
 
-          <button className="end-call">
+          <button
+            className="control-btn"
+            title="Copy Summary"
+            onClick={copySummary}
+          >
+            <Copy size={20} />
+          </button>
+
+          <button
+            className="control-btn"
+            title="Download PDF"
+            onClick={downloadSummary}
+          >
+            <Download size={20} />
+          </button>
+
+          <button
+            className="end-call"
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to leave the meeting?")
+              ) {
+                alert("Meeting Ended");
+                window.location.href = "/";
+              }
+            }}
+          >
             <PhoneOff size={20} />
           </button>
         </footer>
